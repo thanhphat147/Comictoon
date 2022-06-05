@@ -12,11 +12,8 @@ import Setting from '../screens/SettingScreen'
 import Search from '../screens/SearchScreen'
 
 export default function ColorScreen({ route, navigation }) {
-  // console.log("Screen:",route.params);
-
   const viewRef = React.useRef(null);
   const [chooseScreen, setChooseScreen] = useState();
-
   useEffect(() => {
     switch (route.name) {
       case 'Home':  { setChooseScreen("home"); break; }
@@ -41,7 +38,7 @@ export default function ColorScreen({ route, navigation }) {
             easing={'ease-in-out'}
             style={Styles.container}>
 
-            <Home/>
+            <Home />
             
           </Animatable.View>
       
@@ -65,14 +62,16 @@ export default function ColorScreen({ route, navigation }) {
   }
   else if(chooseScreen == "profile"){
     return (
-      
           <View style={Styles.container}>
           <Animatable.View
             ref={viewRef}
             easing={'ease-in-out'}
-            style={Styles.container} >
+            style={Styles.container}>
+
             <Profile />
+            
           </Animatable.View>
+          
         </View>
         )
   }
@@ -113,6 +112,7 @@ export default function ColorScreen({ route, navigation }) {
         easing={'ease-in-out'}
         style={Styles.container}>
         <View style={styles.container}>
+      <Text>Null</Text>
     </View>
       </Animatable.View>
     </View>

@@ -7,12 +7,12 @@ const ComicShow = ({ item }) => {
     <View style={styles.itemContainer}>
       <Image
         key={new Date()}
-        source={{ uri: item.imgComic }}
+        source={{ uri: item.comics_img }}
         style={styles.imgItem} 
-        resizeMode= "cover"
+        resizeMode= "stretch"
       />
       <View>
-        <Text>{item.title}</Text>
+        <Text style={styles.title}>{item.comics_name}</Text>
       </View>
     </View>
   );
@@ -25,10 +25,15 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   imgItem: {
-    width: 90,
+    width: 100,
     height: 100,
     borderRadius: 10,
     marginTop: 10
+  },
+  title: {
+    textAlign: 'center',
+    fontWeight: "bold",
+    fontSize: 15
   }
 });
 export default ComicShow;

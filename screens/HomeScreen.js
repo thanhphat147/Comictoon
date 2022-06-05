@@ -1,104 +1,124 @@
 import React, {Component} from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Image, FlatList } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Image, FlatList, Dimensions } from 'react-native';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import ComicShow from '../components/itemList';
-import Comic from '../components/Comic';
 import BannerImg from '../assets/banner/banner-comic.jpg';
-const numColumn = 3;
+import {BASE_URL} from '../auth/config';
 
+const numColumn = 3;
 class HomeScreen extends Component {
-  state = {
-    data: [
-      {
-          id: 1,
-          title: 'Harry Porter',
-          category: 'tiểu thuyết',
-          dateCreated: '1997',
-          imgComic: 'https://m.media-amazon.com/images/I/71Q1Iu4suSL._AC_SL1000_.jpg',
-          likeVote: 2
-      },
-      {
-        
-          id: 2,
-          title: 'Doraemon',
-          category: 'Hài hước',
-          dateCreated: '1997',
-          imgComic: 'https://m.media-amazon.com/images/M/MV5BYzIzOWQ3NDYtOTFlOC00OGMwLTgwZWItNWI2ZDlmZGEwNGQ3XkEyXkFqcGdeQXVyODAzNzAwOTU@.jpg',
-          likeVote: 34,
-        
-      },
-      {
-        id: 3,
-        title: 'One piece',
-        category: 'Phiêu lưu',
-        dateCreated: '1997',
-        imgComic: 'https://i.pinimg.com/originals/6a/f3/87/6af387457739795e0b206aa27b17b457.jpg',
-        likeVote: 200,
-        
-      }, 
-      {
-        id: 4,
-        title: 'Naruto',
-        category: 'Hành động',
-        dateCreated: '1997',
-        imgComic: 'https://img1.ak.crunchyroll.com/i/spire4/5568ffb263f6bcba85a639980b80dd9a1612993223_full.jpg',
-        likeVote: 120,
-        
-      }, 
-      {
-        id: 5,
-        title: 'Dragon ball',
-        category: 'Hành động',
-        dateCreated: '1997',
-        imgComic: 'https://dragonballwiki.net/xemphim/wp-content/uploads/2017/06/b1490089c2c0f46a4058e82f9889a3aa.jpg',
-        likeVote: 107,
-        
-      }, 
-    ],
-    
-    error: null,
-    
+  constructor()
+  {
+    super();
+    this.state = {
+      comics_id: '',
+      comics_name: '',
+      comics_introduce: '',
+      comics_style: '',
+      comics_img: '',
+      comics_cover_img: '',
+      like_comics: '',
+      comics_state: '',
+      dataComic: [],
+    };
   }
+
+  //lấy dữ liệu truyện đã nhận từ api
+  getComic=()=>{
+    var url = `${BASE_URL}/data`;
+    axios.get(url)
+    .then((aData)=>{
+        // console.log(aData.data);
+        this.setState({
+          dataComic: aData.data,
+        })
+    })
+  };
+  checkFavComic = async (comics_id)=>{
+    
+
+    var get_id_user = '';
+    try {
+      const storedValue = await AsyncStorage.getItem("dataUser");
+      const data = JSON.parse(storedValue);
+      // console.log("dataUser profile:",data);
+      get_id_user = data[0].user_id;
+      //console.log(get_id_user);
+    } catch (error) {
+        console.log('Lỗi lây ID user')
+    }
+    const dataInsert = {
+      user_id: get_id_user,
+      comics_id: comics_id,
+    };
+    var url = `${BASE_URL}/checkFollow`;
+    axios.post(url, dataInsert)
+      .then((response) => {
+        var valueX = '';
+        if (response.data == "0") {
+          valueX = 'Follow';
+          //console.log('aa');
+        }
+        else {
+          valueX = 'Đã Follow';
+          //console.log('zz');
+
+        }
+        AsyncStorage.setItem("stateCheck",JSON.stringify(valueX) );
+
+      })
+      console.log('get_id_user:'+get_id_user);
+      console.log('id'+comics_id);
+      this.props.navigation.reset({
+        index: 0,
+        routes: [{ name: 'Home' }],
+      });
+  };
+  componentDidMount(){
+    this.getComic();
+  };
+
   render() {
     return (
       <View style={styles.container}>
-        <Image source={BannerImg} style= {{height: 230, maxWidth: 500}} resizeMode= "contain"/>
+        <Image source={BannerImg} style= {{width: Dimensions.get('window').width, height: 250,}} resizeMode= "contain"/>
         <View style={styles.btnContainer}>
           <TouchableOpacity onPress={()=>this.props.navigation.navigate('Xếp Hạng')} >
             <Image source={{ uri: "https://cdn-icons-png.flaticon.com/128/1603/1603847.png" }} style={ styles.btn } />
             <Text style={ styles.menuTitle }>Xếp hạng</Text>
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={()=>this.props.navigation.navigate('Phân loại')}>
             <Image source={{ uri: "https://cdn-icons-png.flaticon.com/512/6238/6238670.png" }} style={ styles.btn } />
             <Text style={ styles.menuTitle }>Thể loại</Text>
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={()=>this.props.navigation.navigate('Mới nhất')}>
             <Image source={{ uri: "https://cdn-icons-png.flaticon.com/512/6828/6828662.png" }} style={ styles.btn } />
             <Text style={ styles.menuTitle }>Mới nhất</Text>
           </TouchableOpacity>
           
         </View>
-        <View>
-        <View style={{flex:1}}>
-            <FlatList
-            numColumns={numColumn}
-            data={this.state.data}
-            keyExtractor={(item) => item}
-            extraData={this.state.id}
-            renderItem={({ item, index}) => (
-              <TouchableOpacity
-                onPress={() => {
-                  this.props.navigation.navigate('Giới thiệu', { 
-                    data: item
-                    })}} >
-                <ComicShow item={item} />
-              </TouchableOpacity>
-            )}
-            />
-        </View>
-        </View>
-        
-          
+          <View style={{flex:1}}>
+              <FlatList
+              numColumns={numColumn}
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={{ paddingBottom: 10}}
+              data={this.state.dataComic}
+              keyExtractor={(item, index) => index}
+              extraData={this.state.comics_id}
+              renderItem={({ item}) => (
+                <TouchableOpacity
+                  onPress={() => {
+                    this.checkFavComic(item.comics_id)
+                    this.props.navigation.navigate('Giới thiệu')
+                    AsyncStorage.setItem('dataComic', JSON.stringify({data: item}))
+                    }} >
+                  <ComicShow item={item} />
+                </TouchableOpacity>
+              )}
+              />
+          </View>
       </View>
 
       
@@ -116,6 +136,7 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     backgroundColor: '#fff',
+    
     flex: 1,
   },
   containerInput: {
@@ -149,8 +170,6 @@ const styles = StyleSheet.create({
   },
   menuTitle: {
     textAlign: 'center',
-    
   },
-  listContainer: {
-  }
+  
 });

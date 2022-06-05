@@ -8,6 +8,7 @@ import * as Animatable from 'react-native-animatable';
 import Profile from '../screens/ProfileScreen'
 const TabArr = [
   { route: 'Home', label: 'Home', type: Icons.Entypo, icon: 'home', component: Screen, color: Colors.purple, alphaClr: Colors.purpleAlpha },
+  { route: 'Search', label: 'Search', type: Icons.FontAwesome5, icon: 'search', component: Screen, color: Colors.purple, alphaClr: Colors.purpleAlpha },
   { route: 'Follow', label: 'Follow', type: Icons.FontAwesome, icon: 'th-large', component: Screen, color: Colors.purple, alphaClr: Colors.purpleAlpha },
   { route: 'Profile', label: 'Profile', type: Icons.FontAwesome5, icon: 'user', component: Screen, color: Colors.purple, alphaClr: Colors.purpleAlpha },
   { route: 'Setting', label: 'Setting', type: Icons.AntDesign, icon: 'setting', component: Screen, color: Colors.purple, alphaClr: Colors.purpleAlpha },
@@ -31,7 +32,6 @@ const TabButton = (props) => {
     }
   }, [focused])
 
-  
   return (
     <TouchableOpacity
       onPress={onPress}
@@ -60,7 +60,7 @@ export default class NavigationTab extends Component {
     super(props);
     // console.log('prop mytab: ', props);
   }
-
+  
   render() {
     return (
     <Tab.Navigator
@@ -68,10 +68,7 @@ export default class NavigationTab extends Component {
         headerShown: false,
         tabBarStyle: {
           height: 60,
-          position: 'absolute',
-          bottom: 16,
-          right: 10,
-          left: 10,
+          position: 'relative',
           backgroundColor:'#e5e9f0',
           borderRadius: 13
         }
@@ -79,7 +76,6 @@ export default class NavigationTab extends Component {
     >
       {TabArr.map((item, index) => {
         return (
-          // <Tab.Screen key={index} name={item.route} component={item.component} initialParams={{userInfor:this.props}}
           <Tab.Screen key={index} name={item.route} component={item.component}
             options={{
               tabBarShowLabel: false,

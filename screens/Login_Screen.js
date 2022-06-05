@@ -51,6 +51,8 @@ export default class Login extends Component {
           { text: "OK", onPress: () => {
             this.props.navigation.navigate('Trang cá nhân');
             AsyncStorage.setItem("dataUser",JSON.stringify(response.data) );
+            AsyncStorage.setItem("UpdateLoginUsername",JSON.stringify(dataLogin.user_name) );
+            AsyncStorage.setItem("UpdateLoginpass",JSON.stringify(dataLogin.user_pass) );
             // this.setState({dataUser:data1});
             //  this.onSaveDataToAsync();
           }}

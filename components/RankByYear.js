@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {View, FlatList, TouchableOpacity, StyleSheet} from 'react-native'
 import HorizontalComicShow from './CustomItemList';
-import Comic from './Comic';
 
 export default class RankByYear extends Component {
   state = {
