@@ -20,7 +20,7 @@ Hướng dẫn chạy ứng dụng bằng giả lập Android Studio:
 11. Tại trình terminal, Nhập và chạy lệnh sau "node server.js"
 12. Chạy file ngrok.exe trong thư mục code ứng dụng, 1 trình terminal sẽ hiện ra.
 13. Nhập dòng sau và chạy: "ngrok http 3001".
-14. copy địa chỉ Forwarding như hình bên dưới. Mở file config.js theo đường dẫn auth/config.js, xóa đại chỉ cũ và paste địa chỉ mới vào BASE_URL.
+14. Copy địa chỉ Forwarding như hình bên dưới. Mở file config.js theo đường dẫn auth/config.js, xóa địa chỉ cũ và paste địa chỉ Forwarding đã copy vào BASE_URL.
 
 ![image](https://github.com/thanhphat147/Comictoon/assets/32811788/cdfec2ef-49f9-499f-9b92-691e4c438800)
 
